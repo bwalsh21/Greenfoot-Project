@@ -1,0 +1,9 @@
+   public void question(){
+        int x = 0;
+        Random rand = new Random();
+      while (x != 1){
+            x = rand.nextInt(10);  
+        }
+        String name;
+        name = JOptionPane.showInputDialog("Enter your name.");
+    }
