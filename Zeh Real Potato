@@ -1,0 +1,183 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import javax.swing.JOptionPane;
+import java.util.Random;
+
+/**
+ * Write a description of class GameScreen here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class GameScreen extends World
+{
+    private int score;
+    private int time;
+    /**
+     * Constructor for objects of class MyWorld.
+     * 
+     */
+    public GameScreen()
+    {    
+        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
+        super(1000, 600, 1);
+        prepare();
+        score=0;
+        time=0;
+        showScore();
+        addData(0);
+        countTime();
+    }
+    /**
+     * Adds all the objects the program needs to start
+     * That is: create the initial objects and add them to the world.
+     */
+    public void prepare()
+    {
+        Picker pick = new Picker ();
+        GreenfootImage pickerImage = pick.getImage();
+        pickerImage.scale(75, 75);
+        addObject(pick, 150, 150);
+        Thrower guy = new Thrower();
+        GreenfootImage throwerImage = guy.getImage();
+        throwerImage.scale(75, 75);
+        addObject(guy, 800, 150);
+        //Actors are added into the world.
+    }
+    public void showScore(){
+        //This method shows the score and time and also shows the win screen if the game is won
+        showText("Score: " + score, 80, 25);
+        showText("Time: " + time, 900, 25);
+        if(score>=200){
+            winScreen();   
+        }
+    }
+    public void addScore(int points){
+        score = score + points;
+        showScore();
+        //This method will update the score if a score change is made.
+    }
+    public void addData(int num){
+        while (num < 8){
+            Trash trash = new Trash();
+            GreenfootImage trashImage = trash.getImage();
+            trashImage.scale(50, 50);
+            addObject(trash, Greenfoot.getRandomNumber(1000),Greenfoot.getRandomNumber(600));
+            num = num + 1;
+        }
+        //This method adds trash if there aren't 8 on the screen
+    }
+    public void addGoverment(){
+        if(time == 1000 || time == 2000 || time == 3000)
+        {
+            Thrower guy = new Thrower();
+            GreenfootImage throwerImage = guy.getImage();
+            throwerImage.scale(50, 50);
+            addObject(guy, Greenfoot.getRandomNumber(1000), Greenfoot.getRandomNumber(600)); 
+        }
+        //This method adds another adversary when time is equal to 1000, 2000 and 3000.
+    }
+    public void countTime(){
+        showText("Time: " + time, 900, 25); 
+        time = time + 1;
+        addGoverment();
+        double randK;
+        randK=Math.random();
+        if(randK<0.004){
+            questions();
+        }
+        //This method adds time and calls other method based on the time.
+    }
+    public void winScreen(){
+        winScreen win = new winScreen();
+        GreenfootImage winImage = win.getImage();
+        addObject(win, 500,300);
+        Greenfoot.stop();
+        //This method controls when the game is won.
+    }
+    public void questions(){
+    	int randQ;
+    	randQ = (int) (20*Math.random());
+    	//This adds a random integer that determines which question is asked.
+    	String[] questions = {"Is \"Reduce, Reuse, Recycle\" the correct slogan?",
+        	"Do Americans purchase 30 million water bottles each year?",
+        	"Should all batteries be recycled?",
+        	"Does 1.4 billion pounds of garbage enter the oceans each year?",
+        	"Is 40% of China's surface affected by acid rain?",
+        	"Does 30% of San Francisco's pollution come from China?",
+        	"Will 5% of the world’s air pollution be reduced if all glass is recycled?",
+        	"Will 25% of the world’s water pollution be reduced if all glass is recycled?",
+        	"Does the average person produce 2 kg of garbage each day?",
+        	"Do 48% of water bottles get recycled?",
+        	"Does 3.3 billion pounds of waste go into the ocean each year?",
+        	"Can 80% of landfills be recycled?",
+        	"Does the U.S. produce 16% of the world’s CO2 pollution?",
+        	"Does the U.S. produce 19% of the world’s waste?",
+        	"Does the U.S. use 25% of the world’s natural resources?",
+        	"Do people recycle to use non-renewable resources?",
+        	"Is Earth's ozone layer growing?",
+        	"Is climate change real?",
+        	"Are 51 billion piecees of litter thrown onto American roads annually?",
+        	"Global warming causes 5 to 50 species to go extinct each year."
+    	};
+    	//These are the possible questions to ask
+    	boolean[] answers = {true, false, false, true, true, true, false, false,
+        	true, false, false, true, true, false, true, false, false, true, true, false};
+        //These are each question's true or false answers
+    	String[] reasons = {"This is a famous slogan.","Americans purchase 50 million each year.",
+        	"Only some batteries are recyclable. Most should be thrown away.",
+        	"Most of the trash in the ocean ends up there from rivers and sewers.",
+        	"Acid rain is made by gases in the air like CO2 reacting with water.",
+        	"Pollution can impact the other side of the world!",
+        	"20% of the world’s air pollution would be reduced.",
+        	"50% of the world’s water pollution would be reduced.",
+        	"As a whole, the US produces over 200 million kilograms of garbage each year!",
+        	"Only 13% of water bottles get recycled!",
+        	"14 billion pounds of trash get dumped into the ocean every year.",
+        	"You can help stop excessive landfill use by recycling your recyclable waste.",
+        	"The U.S. is second only to China, which produces 29% of the world’s CO2 pollution.",
+        	"Despite being 4% of the world’s population, the U.S. produces 30% of its waste.",
+        	"Despite being 4% of the world’s population, the U.S. uses 25% of its resources.",
+        	"People recycle to convert waste into reusable material.",
+        	"Due to chlorofluorocarbons and other pollutants, the ozone layer is shrinking.",
+        	"Yes, humans have drastically increased the amount of CO2 in the atmosphere.",
+        	"The average American throws 160 pieces of litter on roads each year.",
+        	"100 to 1,000 species die out each year due to global warming."
+    	};
+    	//These are important blurbs which reveal the truth if the correct answer is false and provide useful environmental information.
+    	String thisQ=questions[randQ];
+    	boolean thisA=answers[randQ];
+    	String thisR=reasons[randQ];
+    	//These get the corresponding questions, answers, and reasons
+    	int numA=-1;
+    	while(numA==-1){
+        	numA=optionsMethod(thisQ);
+    	}
+    	//This loop is to repeat the question if the user presses the "x" button
+    	boolean givenA;
+    	if(numA==0){
+        	givenA=true;
+    	}else{
+        	givenA=false;
+    	}
+    	//Corresponds the button input with a true or false answer
+    	if(givenA==thisA){
+        	addScore((int)(Math.random()*11)+10);
+        	JOptionPane.showMessageDialog(null, "Correct" + "\n" + thisR);
+        	//If your answer is correct, points are added and a message is shown.
+    	}else{
+        	addScore(-((int)(Math.random()*11)+10));
+        	JOptionPane.showMessageDialog(null, "Wrong" + "\n" + thisR);
+        	//If your answer is incorrect, points are subtracted and a message is shown.
+    	}
+	}
+	public int optionsMethod(String thisQ){
+    	String[] options = new String[] {"True", "False"};
+    	int response=JOptionPane.showOptionDialog(null, thisQ, "Question",
+    	JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+    	null, options, options[0]);
+    	return response;
+    	//Asks the question in a JOptionPane
+	}
+}
+
+
